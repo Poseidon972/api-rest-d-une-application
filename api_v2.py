@@ -1,34 +1,19 @@
 from flask import Flask, jsonify, request
+from db import Database
 import mysql.connector             
 app = Flask(__name__)
 
-class Database:
-
-    def __init__(self, host, ):
-        self.host =host
-        self.user = self.user
-        self.password = password
-        self.database = database
-
-    def __connect(self):
-         connector = mysql.connector.connect(
-             host = self.host,
-             user = self.user,
-             password = self.password,
-             database = self.database)
-         return connector
-
 mydb= mysql.connector.connect(
     host= "127.0.0.1",
-    user= "extern_user1",
-    password= " bt5@c13l972",
+    user= "root",
+    password= "",
     database= "ciel2027",
     port = 3306
 )
 cursor = mydb.cursor()
 
 # Récupérer tous les étudiants
-@app.route('/api/etudiants/', methods=['GET'])
+@app.route('/v2/etudiants/', methods=['GET'])
 def getEtudiants():
     try :
 
@@ -55,7 +40,7 @@ def getEtudiants():
 
 
 # Récupérer un étudiant grâce à son ID
-@app.route('/api/etudiants/<id>', methods=['GET'])
+@app.route('/v2/etudiants/<id>', methods=['GET'])
 def getEtudiant(id):
     req = "SELECT * FROM etudiant WHERE idetudiant = " + id
     print(req)
@@ -75,7 +60,7 @@ def getEtudiant(id):
         return jsonify({"error": "Étudiant non trouvé"}), 404
 
 # Ajouter un étudiant
-@app.route('/api/etudiants/', methods=['POST'])
+@app.route('/v2/etudiants/', methods=['POST'])
 def addEtudiant():
     try:
 
@@ -92,7 +77,7 @@ def addEtudiant():
         return jsonify({"error": "Erreur lors de l'ajout"}), 400
 
 # Mettre à jour un étudiant
-@app.route('/api/etudiants/<int:id>', methods=['PUT'])
+@app.route('/v2/etudiants/<int:id>', methods=['PUT'])
 def updateEtudiant(id):
     try:
 
@@ -110,7 +95,7 @@ def updateEtudiant(id):
         return jsonify({"error": "Erreur lors de la mise à jour"}), 400
 
 # Supprimer un étudiant
-@app.route('/api/etudiants/<int:id>', methods=['DELETE'])
+@app.route('/v2/etudiants/<int:id>', methods=['DELETE'])
 def deleteEtudiant(id): 
     try:
         req = f"DELETE FROM etudiant WHERE idetudiant={id}"
