@@ -1,18 +1,16 @@
+from flask import Flask, jsonify, request
 import mysql.connector
 
-mydb = mysq1.connector.connect(
+mydb = mysql.connector.connect(
 host = "127.0.0.1",
 user = "root",
-password = ""
-database = "ciel2025"
+password = "",
+database = "ciel2027"
 )
 cursor = mydb. cursor()
 request = "SELECT * FROM etudiant"
 cursor.execute(request)
 result = cursor.fetchall()
-
-for record in result:
-print(record)
 
 mydb = mysql.connector.connect(
     host = "127.0.0.1",
@@ -28,7 +26,6 @@ result = cursor.fetchall()
 for record in result:
     print(record)
 
-from flask import Flask
 
 app = Flask(__name__)
 
@@ -98,19 +95,20 @@ def updateEtudiant(id):
     prenom = request.json['prenom']
     email = request.json['email']
     telephone = request.json['telephone']
-    req = f"UPDATE etudiant \ 
-        SET nom='{nom}', prenom='{prenom}', email='{email}', telephone='{telephone}' \
-            WHERE idetudiant={id}"
+    req = f"""UPDATE etudiant
+SET nom='{nom}', prenom='{prenom}', email='{email}', telephone='{telephone}'
+WHERE idetudiant={id}"""
+
     cursor.execute(req)
     mydb.commit()
     return jsonify({"message": "Mise à jour OK"}), 200
 
 @app.route('/api/etudiants/<int:id>', methods=['DELETE'])
 def deleteEtudiant(id):
-    try:
-        req = f"DELETE FROM etudiant WHERE idetudiant={id}"
-        cursor.execute(req)
-        mydb.commit()
+    
+    req = f"DELETE FROM etudiant WHERE idetudiant={id}"
+    cursor.execute(req)
+    mydb.commit()
     return jsonify({"message": "Suppression OK"}), 200
 
 if __name__ == '__main__':
